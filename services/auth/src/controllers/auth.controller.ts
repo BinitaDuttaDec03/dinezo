@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 
 import User from "../models/user.model.js"
 import TryCatch from "../middlewares/tryCatch.middleware.js"
+import type { IAuthenticatedRequest } from "../middlewares/isAuth.js"
 
 export const loginUser = TryCatch(async (req, res) => {
     const { name, email, picture } = req.body
@@ -26,4 +27,37 @@ export const loginUser = TryCatch(async (req, res) => {
         token,
         user
     })
+})
+
+const allowedRoles = ["customer", "rider", "seller"]
+type Role = (typeof allowedRoles)[number]
+
+export const addUserRole = TryCatch(async (req: IAuthenticatedRequest, res) => {
+    if (!req.user?._id) {
+        res.status(401).json({
+            message: "Unauthorized"
+        })
+        return
+    }
+
+    const { role } = req.body as { role: Role }
+
+    if (!allowedRoles.includes(role)) {
+        return res.status(400).json({
+            message: "Invalid role"
+        })
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true })
+
+    if (!user) {
+        res.status(404).json({
+            message: "User not found"
+        })
+    }
+
+    const token = jwt.sign({ user }, process.env.JWT_SECRET as string, {
+        expiresIn: "15d"
+    })
+    res.json({ user, token })
 })
