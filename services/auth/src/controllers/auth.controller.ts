@@ -1,12 +1,25 @@
-import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 
 import User from "../models/user.model.js"
 import TryCatch from "../middlewares/tryCatch.middleware.js"
-import type { IAuthenticatedRequest } from "../middlewares/isAuth.js"
+import type { IAuthenticatedRequest } from "../middlewares/isAuth.middleware.js"
+import { oauth2Client } from "../config/google.config.js"
+import axios from "axios"
 
 export const loginUser = TryCatch(async (req, res) => {
-    const { name, email, picture } = req.body
+    const { code } = req.body
+    if (!code) {
+        return res.status(400).json({
+            message: "Authorization code is required"
+        })
+    }
+
+    const googleRes = await oauth2Client.getToken(code)
+    oauth2Client.setCredentials(googleRes.tokens)
+
+    const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`)
+
+    const { name, email, picture } = userRes.data
 
     let user = await User.findOne({ email })
 
