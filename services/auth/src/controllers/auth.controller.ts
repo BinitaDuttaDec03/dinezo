@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken"
+import axios from "axios"
 
 import User from "../models/user.model.js"
 import TryCatch from "../middlewares/tryCatch.middleware.js"
 import type { IAuthenticatedRequest } from "../middlewares/isAuth.middleware.js"
 import { oauth2Client } from "../config/google.config.js"
-import axios from "axios"
 
 export const loginUser = TryCatch(async (req, res) => {
     const { code } = req.body
