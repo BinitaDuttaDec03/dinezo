@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PublicRoute from "./components/publicRoute";
 import ProtectedRoute from "./components/protectedRote";
+import SelectRole from "./pages/SelectRole";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
+            <Route path="/select-role" element={<SelectRole />} />
           </Route>
         </Routes>
       </BrowserRouter >
