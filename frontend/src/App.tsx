@@ -2,14 +2,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import PublicRoute from "./components/publicRoute";
-import ProtectedRoute from "./components/protectedRote";
+import ProtectedRoute from "./components/ProtectedRoute";
 import SelectRole from "./pages/SelectRole";
+import PublicRoute from "./components/PublicRoute";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />
