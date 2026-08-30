@@ -6,16 +6,16 @@ import {
     useState,
     type ReactNode,
 } from "react";
-
+import { Toaster } from "react-hot-toast";
 import type { IAppContextType, ILocationData, IUser } from "../types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
-interface IAppProviderProps {
+interface AppProviderProps {
     children: ReactNode;
 }
 
-export const AppProvider = ({ children }: IAppProviderProps) => {
+export const AppProvider = ({ children }: AppProviderProps) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -48,6 +48,46 @@ export const AppProvider = ({ children }: IAppProviderProps) => {
         fetchUser();
     }, []);
 
+    useEffect(() => {
+        if (!navigator.geolocation)
+            return alert("Please Allow Location to continue");
+
+        setLoadingLocation(true);
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords;
+
+            try {
+                const res = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                );
+                const data = await res.json();
+
+                setLocation({
+                    latitude,
+                    longitude,
+                    formattedAddress: data.display_name || "current location",
+                });
+
+                setCity(
+                    data.address.city ||
+                    data.address.town ||
+                    data.address.village ||
+                    "Your Location"
+                );
+                setLoadingLocation(false);
+            } catch (error) {
+                setLocation({
+                    latitude,
+                    longitude,
+                    formattedAddress: "Current Location",
+                });
+                setCity("Failed to load");
+                setLoadingLocation(false);
+            }
+        });
+    }, []);
+
     return (
         <AppContext.Provider
             value={{
@@ -63,6 +103,8 @@ export const AppProvider = ({ children }: IAppProviderProps) => {
             }}
         >
             {children}
+
+            <Toaster />
         </AppContext.Provider>
     );
 };
