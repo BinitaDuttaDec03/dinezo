@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import cors from "cors";
 
+import uploadRoutes from "./routes/cloudinary.route.js";
+
 dotenv.config();
 
 const app = express();
@@ -23,6 +25,8 @@ cloudinary.v2.config({
   api_key: CLOUD_API_KEY,
   api_secret: CLOUD_SECRET_KEY,
 });
+
+app.use("/api", uploadRoutes);
 
 const PORT = process.env.PORT || 5002;
 
