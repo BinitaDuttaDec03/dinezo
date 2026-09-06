@@ -10,12 +10,12 @@ export interface IUser {
   restaurantId: string;
 }
 
-export interface AuthenticatedRequest extends Request {
+export interface IAuthenticatedRequest extends Request {
   user?: IUser | null;
 }
 
 export const isAuth = async (
-  req: AuthenticatedRequest,
+  req: IAuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -57,4 +57,21 @@ export const isAuth = async (
       message: "Please Login - Jwt error",
     });
   }
+};
+
+export const isSeller = async (
+  req: IAuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const user = req.user;
+
+  if (user && user.role !== "seller") {
+    res.status(401).json({
+      message: "You are not authorized seller",
+    });
+    return;
+  }
+
+  next();
 };
