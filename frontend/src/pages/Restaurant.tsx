@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import type { IRestaurant } from "../types";
+import AddRestaurant from "../components/AddRestaurant";
+
+type SellerTab = "menu" | "add-item" | "sales";
 
 const Restaurant = () => {
   const [restaurant, setRestaurant] = useState<IRestaurant | null>(null);
@@ -42,8 +45,13 @@ const Restaurant = () => {
       </div>
     );
 
+  if (!restaurant) {
+    return <AddRestaurant fetchMyRestaurant={fetchMyRestaurant} />;
+  }
   return (
-    <div>Restaurant</div>
+    <div className="min-h-screen bg-gray-50 px-4 py-6 space-y-6">
+      Restaurant
+    </div>
   );
 };
 
