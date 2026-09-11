@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,8 +10,11 @@ import Account from "./components/Account";
 import { useAppData } from "./context/AppContext";
 import Restaurant from "./pages/Restaurant";
 
-const App = () => {
+const AppContent = () => {
   const { loading, user } = useAppData();
+  const location = useLocation();
+
+  const shouldShowNavbar = !(user?.role === "seller" && location.pathname === "/");
 
   if (loading) {
     return (
@@ -23,24 +26,30 @@ const App = () => {
 
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
+      {shouldShowNavbar && <Navbar />}
+      <Routes>
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
 
-          <Route element={<ProtectedRoute />}>
-            <Route
-              path="/"
-              element={user?.role === "seller" ? <Restaurant /> : <Home />}
-            />
-            <Route path="/select-role" element={<SelectRole />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/"
+            element={user?.role === "seller" ? <Restaurant /> : <Home />}
+          />
+          <Route path="/select-role" element={<SelectRole />} />
+          <Route path="/account" element={<Account />} />
+        </Route>
+      </Routes>
     </>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 };
 

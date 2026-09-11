@@ -3,6 +3,7 @@ import axios from "axios";
 
 import type { IRestaurant } from "../types";
 import AddRestaurant from "../components/AddRestaurant";
+import RestaurantProfile from "../components/RestaurantProfile";
 
 type SellerTab = "menu" | "add-item" | "sales";
 
@@ -50,7 +51,11 @@ const Restaurant = () => {
   }
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6 space-y-6">
-      Restaurant
+      <RestaurantProfile
+        restaurant={restaurant}
+        onUpdate={setRestaurant}
+        isSeller={true}
+      />
     </div>
   );
 };
