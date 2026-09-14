@@ -57,7 +57,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
       setEditMode(false);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to update");
+      toast.error("failed to update");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
     localStorage.setItem("token", "");
     setIsAuth(false);
     setUser(null);
-    toast.success("loggedOut successfully");
+    toast.success("logout successful");
   };
   return (
     <div className="mx-auto max-w-xl rounded-xl bg-white shadow-sm overflow-hidden">

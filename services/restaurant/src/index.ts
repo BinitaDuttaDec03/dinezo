@@ -4,6 +4,7 @@ import cors from "cors";
 
 import connectDB from "./config/db.config.js";
 import restaurantRoutes from "./routes/restaurant.route.js";
+import itemRoutes from "./routes/menuItem.route.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/restaurant", restaurantRoutes);
+app.use("/api/item", itemRoutes);
 
 const PORT = process.env.PORT || 5001;
 

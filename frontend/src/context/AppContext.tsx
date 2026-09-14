@@ -22,7 +22,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
     const [location, setLocation] = useState<ILocationData | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false);
-    const [city, setCity] = useState("Fecthing Location...");
+    const [city, setCity] = useState("Fetching Location...");
 
     async function fetchUser() {
         try {

@@ -16,7 +16,7 @@ const Account = () => {
     setUser(null);
     setIsAuth(false);
     navigate("/login");
-    toast.success("Logout Success");
+    toast.success("logout Success");
   };
 
   return (
