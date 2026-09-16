@@ -31,11 +31,11 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                 },
             });
 
-            toast.success("Item deleted");
+            toast.success("item deleted");
             onItemDeleted();
         } catch (error) {
             console.log(error);
-            toast.error("Failed to delete item");
+            toast.error("failed to delete item");
         }
     };
 
@@ -55,7 +55,7 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
             onItemDeleted();
         } catch (error) {
             console.log(error);
-            toast.error("Failed to update status");
+            toast.error("failed to update status");
         }
     };
 
