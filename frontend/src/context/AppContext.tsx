@@ -7,7 +7,8 @@ import {
     type ReactNode,
 } from "react";
 import { Toaster } from "react-hot-toast";
-import type { IAppContextType, ILocationData, IUser } from "../types";
+
+import type { IAppContextType, ICart, ILocationData, IUser } from "../types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -23,6 +24,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     const [location, setLocation] = useState<ILocationData | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false);
     const [city, setCity] = useState("Fetching Location...");
+
+    const [cart, setCart] = useState<ICart[]>([]);
+    const [subTotal, setSubTotal] = useState(0);
+    const [quantity, setQuantity] = useState(0);
 
     async function fetchUser() {
         try {
@@ -41,6 +46,23 @@ export const AppProvider = ({ children }: AppProviderProps) => {
             setIsAuth(false)
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function fetchCart() {
+        if (!user || user.role !== "customer") return;
+        try {
+            const { data } = await axios.get(`${restaurantService}/api/cart/all`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            setCart(data.cart || []);
+            setSubTotal(data.subtotal || 0);
+            setQuantity(data.cartLength);
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -88,6 +110,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         });
     }, []);
 
+    useEffect(() => {
+        if (user && user.role === "customer") {
+            fetchCart();
+        }
+    }, [user]);
+
     return (
         <AppContext.Provider
             value={{
@@ -100,6 +128,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                 location,
                 loadingLocation,
                 city,
+                cart,
+                fetchCart,
+                quantity,
+                subTotal,
             }}
         >
             {children}
