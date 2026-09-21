@@ -52,7 +52,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     async function fetchCart() {
         if (!user || user.role !== "customer") return;
         try {
-            const { data } = await axios.get(`${restaurantService}/api/cart/all`, {
+            const { data } = await axios.get(`${import.meta.env.VITE_RESTAURANT_SERVICE_URL}/api/cart/all`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
