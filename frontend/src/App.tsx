@@ -10,6 +10,7 @@ import Account from "./components/Account";
 import { useAppData } from "./context/AppContext";
 import Restaurant from "./pages/Restaurant";
 import RestaurantPage from "./pages/RestaurantPage";
+import Cart from "./pages/Cart";
 
 const AppContent = () => {
   const { loading, user } = useAppData();
@@ -41,6 +42,7 @@ const AppContent = () => {
           <Route path="/select-role" element={<SelectRole />} />
           <Route path="/account" element={<Account />} />
           <Route path="/restaurant/:id" element={<RestaurantPage />} />
+          <Route path="/cart" element={<Cart />} />
         </Route>
       </Routes>
     </>
