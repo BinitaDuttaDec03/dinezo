@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import './index.css'
+import "leaflet/dist/leaflet.css";
 import App from './App.tsx'
 import { AppProvider } from './context/AppContext.tsx';
 
