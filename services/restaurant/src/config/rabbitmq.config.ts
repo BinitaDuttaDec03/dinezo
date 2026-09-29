@@ -11,7 +11,11 @@ export const connectRabbitMQ = async () => {
         durable: true,
     });
 
-    console.log("Connected to Rabbitmq (utils service) 🐇");
+    await channel.assertQueue(process.env.RIDER_QUEUE!, {
+        durable: true,
+    });
+
+    console.log("Connected to Rabbitmq (restaurant service) 🐇");
 };
 
 export const getChannel = () => channel;
